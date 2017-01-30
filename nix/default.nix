@@ -36,6 +36,7 @@ let
     releng_treestatus = import ./../src/releng_treestatus { inherit releng_pkgs; };
     releng_mapper = import ./../src/releng_mapper { inherit releng_pkgs; };
     releng_archiver = import ./../src/releng_archiver { inherit releng_pkgs; };
+    releng_slavehealth = import ./../src/releng_slavehealth { inherit releng_pkgs; };
 
     shipit_frontend = import ./../src/shipit_frontend { inherit releng_pkgs; };
     shipit_dashboard = import ./../src/shipit_dashboard { inherit releng_pkgs; };

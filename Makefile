@@ -13,6 +13,7 @@ APPS=\
 	releng_treestatus \
 	releng_mapper \
 	releng_archiver \
+	releng_slavehealth \
 	releng_frontend \
 	shipit_dashboard \
 	shipit_bot_uplift \
@@ -48,6 +49,7 @@ APP_DEV_PORT_releng_tooltool=8002
 APP_DEV_PORT_releng_treestatus=8003
 APP_DEV_PORT_releng_mapper=8004
 APP_DEV_PORT_releng_archiver=8005
+APP_DEV_PORT_releng_slavehealth=8006
 
 APP_DEV_PORT_shipit_frontend=8010
 APP_DEV_PORT_shipit_dashboard=8011
@@ -71,6 +73,7 @@ APP_DEV_ENV_releng_frontend=\
 	NEO_TREESTATUS_URL=https://$(APP_DEV_HOST):$(APP_DEV_PORT_releng_treestatus) \
 	NEO_MAPPER_URL=https://$(APP_DEV_HOST):$(APP_DEV_PORT_releng_mapper) \
 	NEO_ARCHIVER_URL=https://$(APP_DEV_HOST):$(APP_DEV_PORT_releng_archiver) \
+	NEO_SLAVEHEALTH_URL=https://$(APP_DEV_HOST):$(APP_DEV_PORT_releng_slavehealth) \
 	$(APP_DEV)
 APP_DEV_ENV_shipit_frontend=\
 	NEO_DASHBOARD_URL=https://$(APP_DEV_HOST):$(APP_DEV_PORT_shipit_dashboard) \
@@ -83,13 +86,14 @@ APP_STAGING_HEROKU_releng_tooltool=releng-staging-tooltool
 APP_STAGING_HEROKU_releng_treestatus=releng-staging-treestatus
 APP_STAGING_HEROKU_releng_mapper=releng-staging-mapper
 APP_STAGING_HEROKU_releng_archiver=releng-staging-archiver
+APP_STAGING_HEROKU_releng_slavehealth=releng-staging-slavehealth
 
 APP_STAGING_HEROKU_shipit_dashboard=shipit-staging-dashboard
 
 APP_STAGING_S3_releng_docs=releng-staging-docs
 APP_STAGING_S3_releng_frontend=releng-staging-frontend
 APP_STAGING_S3_shipit_frontend=shipit-staging-frontend
-APP_STAGING_CSP_releng_frontend=https://auth.taskcluster.net https://clobberer.staging.mozilla-releng.net https://tooltool.staging.mozilla-releng.net https://treestatus.staging.mozilla-releng.net https://mapper.staging.mozilla-releng.net https://archiver.staging.mozilla-releng.net
+APP_STAGING_CSP_releng_frontend=https://auth.taskcluster.net https://clobberer.staging.mozilla-releng.net https://tooltool.staging.mozilla-releng.net https://treestatus.staging.mozilla-releng.net https://mapper.staging.mozilla-releng.net https://archiver.staging.mozilla-releng.net https://slavehealth.staging.mozilla-releng.net
 APP_STAGING_ENV_releng_frontend=\
 	'version="v$(VERSION)"' \
 	'docs-url="https:\/\/docs\.staging\.mozilla-releng\.net\"' \
@@ -97,7 +101,8 @@ APP_STAGING_ENV_releng_frontend=\
 	'tooltool-url="https:\/\/tooltool\.staging\.mozilla-releng\.net\"' \
 	'treestatus-url="https:\/\/treestatus\.staging\.mozilla-releng\.net\"' \
 	'mapper-url="https:\/\/mapper\.staging\.mozilla-releng\.net\"' \
-	'archiver-url="https:\/\/archiver\.staging\.mozilla-releng\.net\"'
+	'archiver-url="https:\/\/archiver\.staging\.mozilla-releng\.net\"' \
+	'slavehealth-url="https:\/\/slavehealth\.staging\.mozilla-releng\.net\"'
 APP_STAGING_CSP_shipit_frontend=https://auth.taskcluster.net https://dashboard.shipit.staging.mozilla-releng.net https://bugzilla.mozilla.org
 APP_STAGING_ENV_shipit_frontend=\
 	'version="v$(VERSION)"' \
@@ -109,12 +114,14 @@ APP_PRODUCTION_HEROKU_releng_tooltool=releng-production-tooltool
 APP_PRODUCTION_HEROKU_releng_treestatus=releng-production-treestatus
 APP_PRODUCTION_HEROKU_releng_mapper=releng-production-mapper
 APP_PRODUCTION_HEROKU_releng_archiver=releng-production-archiver
+APP_PRODUCTION_HEROKU_releng_slavehealth=releng-production-slavehealth
+
 APP_PRODUCTION_HEROKU_shipit_dashboard=shipit-production-dashboard
 
 APP_PRODUCTION_S3_releng_docs=releng-production-docs
 APP_PRODUCTION_S3_releng_frontend=releng-production-frontend
 APP_PRODUCTION_S3_shipit_frontend=shipit-production-frontend
-APP_PRODUCTION_CSP_releng_frontend=https://auth.taskcluster.net https://clobberer.mozilla-releng.net https://tooltool.mozilla-releng.net https://treestatus.mozilla-releng.net https://mapper.mozilla-releng.net https://archiver.mozilla-releng.net
+APP_PRODUCTION_CSP_releng_frontend=https://auth.taskcluster.net https://clobberer.mozilla-releng.net https://tooltool.mozilla-releng.net https://treestatus.mozilla-releng.net https://mapper.mozilla-releng.net https://archiver.mozilla-releng.net https://slavehealth.mozilla-releng.net
 APP_PRODUCTION_ENV_releng_frontend=\
 	'version="v$(VERSION)"' \
 	'docs-url="https:\/\/docs\.mozilla-releng\.net\"' \
@@ -122,7 +129,8 @@ APP_PRODUCTION_ENV_releng_frontend=\
 	'tooltool-url="https:\/\/tooltool\.mozilla-releng\.net\"' \
 	'treestatus-url="https:\/\/treestatus\.mozilla-releng\.net\"' \
 	'mapper-url="https:\/\/mapper\.mozilla-releng\.net\"' \
-	'archiver-url="https:\/\/archiver\.mozilla-releng\.net\"'
+	'archiver-url="https:\/\/archiver\.mozilla-releng\.net\"' \
+	'slavehealth-url="https:\/\/slavehealth\.mozilla-releng\.net\"'
 APP_PRODUCTION_CSP_shipit_frontend=https://auth.taskcluster.net https://dashboard.shipit.mozilla-releng.net https://bugzilla.mozilla.org
 APP_PRODUCTION_ENV_shipit_frontend=\
 	'version="$(VERSION)"' \
@@ -198,16 +206,17 @@ develop-run-releng_docs: develop-run-SPHINX
 develop-run-elm_common_example: develop-run-FRONTEND
 
 develop-run-releng_frontend: develop-run-FRONTEND
-develop-run-releng_clobberer: require-sqlite develop-run-BACKEND
-develop-run-releng_tooltool: require-sqlite develop-run-BACKEND
+develop-run-releng_clobberer: require-postgres develop-run-BACKEND
+develop-run-releng_tooltool: require-postgres develop-run-BACKEND
 develop-run-releng_treestatus: require-postgres develop-run-BACKEND
-develop-run-releng_mapper: require-sqlite develop-run-BACKEND
-develop-run-releng_archiver: require-sqlite develop-run-BACKEND
+develop-run-releng_mapper: require-postgres develop-run-BACKEND
+develop-run-releng_archiver: require-postgres develop-run-BACKEND
+develop-run-releng_slavehealth: develop-run-BACKEND
 
 develop-run-shipit_frontend: develop-run-FRONTEND
 develop-run-shipit_dashboard: require-postgres develop-run-BACKEND
-develop-run-shipit_pipeline: require-sqlite develop-run-BACKEND
-develop-run-shipit_signoff: require-sqlite develop-run-BACKEND
+develop-run-shipit_pipeline: require-postgres develop-run-BACKEND
+develop-run-shipit_signoff: require-postgres develop-run-BACKEND
 
 develop-run-postgres: build-postgresql require-initdb
 	./result-tool-postgresql/bin/postgres -D $(PWD)/tmp/postgres -h localhost -p $(APP_DEV_POSTGRES_PORT)
@@ -277,6 +286,7 @@ deploy-staging-releng_tooltool:        deploy-staging-HEROKU
 deploy-staging-releng_treestatus:      deploy-staging-HEROKU
 deploy-staging-releng_mapper:          deploy-staging-HEROKU
 deploy-staging-releng_archiver:        deploy-staging-HEROKU
+deploy-staging-releng_slavehealth:     deploy-staging-HEROKU
 
 deploy-staging-shipit_frontend:        deploy-staging-S3
 deploy-staging-shipit_dashboard:       deploy-staging-HEROKU
@@ -327,6 +337,7 @@ deploy-production-releng_tooltool:     # deploy-production-HEROKU
 deploy-production-releng_treestatus:   deploy-production-HEROKU
 deploy-production-releng_mapper:       # deploy-production-HEROKU
 deploy-production-releng_archiver:     # deploy-production-HEROKU
+deploy-production-releng_slavehealth:  # deploy-production-HEROKU
 
 deploy-production-shipit_frontend:     deploy-production-S3
 deploy-production-shipit_dashboard:    deploy-production-HEROKU
