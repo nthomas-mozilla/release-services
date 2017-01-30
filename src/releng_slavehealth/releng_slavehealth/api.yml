@@ -1,0 +1,21 @@
+---
+swagger: "2.0"
+info:
+  version: "1.0.0"
+  title: "RelEng SlaveHealth"
+consumes:
+  - application/json
+produces:
+  - application/json
+paths:
+
+  /example:
+    get:
+      operationId: "releng_slavehealth.api.example"
+      responses:
+        200:
+          description: Trees
+          schema:
+            type: array
+            items:
+              type: string
