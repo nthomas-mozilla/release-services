@@ -18,6 +18,7 @@ APPS=\
 	shipit_bot_uplift \
 	shipit_pipeline \
 	shipit_signoff \
+	shipit_taskcluster \
 	shipit_frontend
 
 TOOL=
@@ -53,6 +54,7 @@ APP_DEV_PORT_shipit_frontend=8010
 APP_DEV_PORT_shipit_dashboard=8011
 APP_DEV_PORT_shipit_pipeline=8012
 APP_DEV_PORT_shipit_signoff=8013
+APP_DEV_PORT_shipit_taskcluster=8014
 
 APP_DEV_POSTGRES_PORT=9000
 
@@ -208,6 +210,7 @@ develop-run-shipit_frontend: develop-run-FRONTEND
 develop-run-shipit_dashboard: require-postgres develop-run-BACKEND
 develop-run-shipit_pipeline: require-sqlite develop-run-BACKEND
 develop-run-shipit_signoff: require-sqlite develop-run-BACKEND
+develop-run-shipit_taskcluster: require-sqlite develop-run-BACKEND
 
 develop-run-postgres: build-postgresql require-initdb
 	./result-tool-postgresql/bin/postgres -D $(PWD)/tmp/postgres -h localhost -p $(APP_DEV_POSTGRES_PORT)
@@ -283,6 +286,7 @@ deploy-staging-shipit_dashboard:       deploy-staging-HEROKU
 deploy-staging-shipit_bot_uplift:   	 # There is no service running, just a hook
 deploy-staging-shipit_pipeline:        # deploy-staging-HEROKU
 deploy-staging-shipit_signoff:         # deploy-staging-HEROKU
+deploy-staging-shipit_:         # deploy-staging-HEROKU
 
 
 

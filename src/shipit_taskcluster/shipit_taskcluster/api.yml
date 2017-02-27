@@ -1,0 +1,129 @@
+---
+swagger: "2.0"
+info:
+  version: "1.0.0"
+  title: "Taskcluster service"
+consumes:
+  - application/json
+produces:
+  - application/json
+paths:
+
+  /:
+
+    get:
+      operationId: "shipit_taskcluster.api.list_steps"
+      description: List all steps with status
+      responses:
+        200:
+          description: List of all steps
+
+  /{uid}/definition:
+
+    get:
+      operationId: "shipit_taskcluster.api.get_step"
+      description: Step definition
+      parameters:
+          - $ref: '#/parameters/uid'
+      responses:
+        200:
+          description: Definition of step
+          schema:
+            $ref: '#/definitions/Step'
+
+
+  /{uid}/status:
+
+    get:
+      operationId: "shipit_taskcluster.api.get_step_status"
+      description: Status of a step
+      parameters:
+        - $ref: "#/parameters/uid"
+      responses:
+        200:
+          description: Status of a step
+          schema:
+            $ref: '#/definitions/StepResult'
+
+  /{uid}:
+    put:
+      operationId: "shipit_taskcluster.api.create_step"
+      description: Create new step
+      parameters:
+        - $ref: "#/parameters/uid"
+      responses:
+        200:
+          description: Returns nothing
+
+    delete:
+      operationId: "shipit_taskcluster.api.delete_step"
+      description: Remove a step
+      parameters:
+        - $ref: '#/parameters/uid'
+      responses:
+        200:
+          description: Removal of step
+
+  # taskcluster specific
+  /{uid}/create_graph:
+    put:
+      operationId: "shipit_taskcluster.api.create_graph"
+      description: "Creates a Taskcluster Graph"
+      parameters:
+        - $ref: '#/parameters/uid'
+      responses:
+        200:
+          description: taskcluster graph created
+
+definitions:
+
+  StepResult:
+    type: object
+    required:
+      - state
+    properties:
+      state:
+        type: string
+        enum:
+          - starting # / pending
+          - running
+          - stopping
+          - exception
+          - completed #/ success
+          - failed
+      message:
+        type: string
+        description: More elaborate description of state for humans.
+      output:
+        $ref: '#/definitions/Ouput'
+
+  Step:
+    type: object
+    required:
+      - uid
+      - input
+      - parameters
+    properties:
+      uid:
+        type: string
+      input:
+        $ref: '#/definitions/Input'
+      parameters:
+        $ref: '#/definitions/Parameters'
+
+  Parameters:
+    type: object
+
+  Input:
+    type: object
+
+  Ouput:
+    type: object
+
+parameters:
+    uid:
+        name: uid
+        in: path
+        description: Step UID
+        required: true
+        type: string

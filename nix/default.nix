@@ -42,6 +42,7 @@ let
     shipit_bot_uplift = import ./../src/shipit_bot_uplift { inherit releng_pkgs; };
     shipit_pipeline = import ./../src/shipit_pipeline { inherit releng_pkgs; };
     shipit_signoff = import ./../src/shipit_signoff { inherit releng_pkgs; };
+    shipit_taskcluster = import ./../src/shipit_taskcluster { inherit releng_pkgs; };
 
   };
 
