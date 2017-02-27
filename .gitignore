@@ -2,6 +2,7 @@
 *.pyc
 *.swp
 .-rplugin~
+.idea
 
 /.cache
 /.elm
