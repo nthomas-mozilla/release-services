@@ -13,7 +13,7 @@ paths:
 
     get:
       operationId: "shipit_taskcluster.api.list_steps"
-      description: List all steps with status
+      description: List all Taskcluster steps with status
       responses:
         200:
           description: List of all steps
@@ -27,7 +27,7 @@ paths:
           - $ref: '#/parameters/uid'
       responses:
         200:
-          description: Definition of step
+          description: Definition of a Taskcluster step
           schema:
             $ref: '#/definitions/Step'
 
@@ -36,19 +36,19 @@ paths:
 
     get:
       operationId: "shipit_taskcluster.api.get_step_status"
-      description: Status of a step
+      description: Status of a Taskcluster step
       parameters:
         - $ref: "#/parameters/uid"
       responses:
         200:
-          description: Status of a step
+          description: Status of a Taskcluster step
           schema:
             $ref: '#/definitions/StepResult'
 
   /{uid}:
     put:
       operationId: "shipit_taskcluster.api.create_step"
-      description: Create new step
+      description: Create new Taskcluster step
       parameters:
         - $ref: "#/parameters/uid"
       responses:
@@ -57,26 +57,62 @@ paths:
 
     delete:
       operationId: "shipit_taskcluster.api.delete_step"
-      description: Remove a step
+      description: Remove a Taskcluster step
       parameters:
         - $ref: '#/parameters/uid'
       responses:
         200:
-          description: Removal of step
+          description: Removal of Taskcluster step
 
   # taskcluster specific
-  /{uid}/create_graph:
+  /{uid}/cancel:
     put:
-      operationId: "shipit_taskcluster.api.create_graph"
-      description: "Creates a Taskcluster Graph"
+      operationId: "shipit_taskcluster.api.cancel_task_group"
+      description: ""
       parameters:
         - $ref: '#/parameters/uid'
       responses:
         200:
-          description: taskcluster graph created
+          description: Taskcluster task cancel task group
+
+  /{uid}/tasks/{taskid}/cancel:
+    put:
+      operationId: "shipit_taskcluster.api.cancel_task"
+      description: ""
+      parameters:
+        - $ref: '#/parameters/uid'
+        - $ref: '#/parameters/taskId'
+      responses:
+        200:
+          description: Taskcluster task cancelled
+
+  /{uid}/tasks/{taskid}/rerun:
+    put:
+      operationId: "shipit_taskcluster.api.rerun_task"
+      description: "Reruns a Taskcluster step. This forces a new run num even if max is reached"
+      parameters:
+        - $ref: '#/parameters/uid'
+        - $ref: '#/parameters/taskId'
+      responses:
+        200:
+          description: Taskcluster task rerun
+
+  /{uid}/tasks/{taskid}/report-completed:
+    put:
+      operationId: "shipit_taskcluster.api.report_task_complete"
+      description: ""
+      parameters:
+        - $ref: '#/parameters/uid'
+        - $ref: '#/parameters/taskId'
+      responses:
+        200:
+          description: Taskcluster task reported complete
+
 
 definitions:
 
+  # Step and StepResult definitions seem generic enough that they should be defined in a more global
+  # location for all shipit services that represent a step
   StepResult:
     type: object
     required:
@@ -95,7 +131,7 @@ definitions:
         type: string
         description: More elaborate description of state for humans.
       output:
-        $ref: '#/definitions/Ouput'
+        $ref: '#/definitions/Output'
 
   Step:
     type: object
@@ -117,7 +153,7 @@ definitions:
   Input:
     type: object
 
-  Ouput:
+  Output:
     type: object
 
 parameters:
@@ -127,3 +163,9 @@ parameters:
         description: Step UID
         required: true
         type: string
+    taskId:
+      name: taskId
+      in: path
+      description: Identifier for a Taskcluster task
+      required: true
+      type: string
