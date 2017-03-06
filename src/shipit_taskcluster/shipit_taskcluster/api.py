@@ -9,22 +9,23 @@ import collections
 
 from shipit_taskcluster.taskcluster import get_task, create_task_group, cancel_tasks, cancel_task
 from shipit_taskcluster.taskcluster import get_task_group_state, TASK_TO_STEP_STATE
-from shipit_taskcluster.taskcluster import update_task_state
 
 log = logging.getLogger(__name__)
 
 STEPS = {}
 STEP = collections.namedtuple("Step", "uid state taskGroupId")
 
+# helpers
+
+def query_state(step):
+    return TASK_TO_STEP_STATE[get_task_group_state(step.taskGroupId)]
 
 ## api
+
 
 def list_steps():
     log.info('listing steps')
     return STEPS.keys()
-
-def query_state(step):
-    return TASK_TO_STEP_STATE[get_task_group_state(step.taskGroupId)]
 
 
 def get_step(uid):
@@ -60,37 +61,6 @@ def delete_step(uid):
     cancel_tasks(STEPS[uid].taskGroupId)
     del STEPS[uid]
     return None
-
-
-def rerun_task(uid, taskid):
-    log.info('rerunning task %s', taskid)
-    if not STEPS.get(uid):
-        return "step with uid {} unknown".format(uid), 404
-    taskid = get_task(STEPS[uid]['taskGroupId'], taskid)
-    if not taskid:
-        return "task with taskid {} unknown".format(taskid), 404
-    STEPS[uid].state = 'running'
-    return None
-
-
-def report_task_complete(uid, taskid):
-    log.info('rerunning task %s', taskid)
-    if not STEPS.get(uid):
-        return "Step with uid {} unknown".format(uid), 404
-    taskid = get_task(STEPS[uid]['taskGroupId'], taskid)
-    if not taskid:
-        return "task with taskid {} unknown".format(taskid), 404
-    return update_task_result(taskid, 'complete')
-
-
-def cancel_task(uid, taskid):
-    log.info('force cancelling task %s', taskid)
-    if not STEPS.get(uid):
-        return "Step with uid {} unknown".format(uid), 404
-    taskid = get_task(STEPS[uid]['taskGroupId'], taskid)
-    if not taskid:
-        return "task with taskid {} unknown".format(taskid), 404
-    return cancel_task(taskid)
 
 
 def cancel_task_group(uid):
