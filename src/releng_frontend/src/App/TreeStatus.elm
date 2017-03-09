@@ -9,9 +9,7 @@ import App.UserScopes
 import App.Utils
 import Form
 import Form.Error
-import Hop
 import Html exposing (..)
-import Html.App
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 import Http

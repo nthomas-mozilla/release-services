@@ -7,8 +7,6 @@ import App.TryChooser
 import App.Types
 import App.UserScopes
 import Hawk
-import Hop
-import Hop.Types
 import Navigation
 import TaskclusterLogin
 import Time

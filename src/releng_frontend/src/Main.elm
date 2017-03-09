@@ -10,10 +10,7 @@ import App.TryChooser
 import App.Types
 import App.UserScopes
 import Hawk
-import Hop
-import Hop.Types
 import Html exposing (..)
-import Html.App
 import Html.Attributes exposing (..)
 import Http
 import Navigation

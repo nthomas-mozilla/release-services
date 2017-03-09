@@ -5,7 +5,7 @@ import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events as Events
 import Http
-import Json.Decode as JsonDecode exposing ((:=))
+import Json.Decode as JsonDecode
 import Utils
 import VirtualDom
 
@@ -18,7 +18,7 @@ dropdown :
 dropdown event items selected =
     div [ class "btn-group btn-dropdown" ]
         [ span
-            [ type' "button"
+            [ type_ "button"
             , class "btn btn-secondary dropdown-toggle"
             , attribute "data-toggle" "dropdown"
             , attribute "aria-haspopup" "true"
@@ -27,7 +27,7 @@ dropdown event items selected =
             [ text <| Maybe.withDefault "Select a value..." selected
             ]
         , span
-            [ type' "button"
+            [ type_ "button"
             , class "btn btn-secondary dropdown-toggle"
             , attribute "data-toggle" "dropdown"
             , attribute "aria-haspopup" "true"
@@ -82,10 +82,10 @@ handleResponse response =
     let
         decoderError =
             JsonDecode.object4 App.Types.ResponseError
-                ("type" := JsonDecode.string)
-                ("detail" := JsonDecode.string)
-                ("status" := JsonDecode.int)
-                ("title" := JsonDecode.string)
+                (JsonDecode.field "type" JsonDecode.string)
+                (JsonDecode.field "detail" JsonDecode.string)
+                (JsonDecode.field "status" JsonDecode.int)
+                (JsonDecode.field "title" JsonDecode.string)
     in
         if 200 <= response.status && response.status < 300 then
             case response.value of

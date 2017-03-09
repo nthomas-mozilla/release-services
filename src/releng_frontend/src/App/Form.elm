@@ -128,7 +128,7 @@ viewButton labelText attributes =
     button
         (attributes
             |> List.append
-                [ type' "submit"
+                [ type_ "submit"
                 , class "btn btn-outline-primary"
                 ]
         )

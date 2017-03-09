@@ -1,7 +1,7 @@
 module App.UserScopes exposing (..)
 
 import Http
-import Json.Decode as JsonDecode exposing ((:=))
+import Json.Decode as JsonDecode
 import Json.Encode as JsonEncode
 import RemoteData
 import String
