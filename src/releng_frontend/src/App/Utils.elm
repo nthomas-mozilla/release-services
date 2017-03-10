@@ -78,43 +78,44 @@ error event message =
         ]
 
 
-handleResponse response =
-    let
-        decoderError =
-            JsonDecode.object4 App.Types.ResponseError
-                (JsonDecode.field "type" JsonDecode.string)
-                (JsonDecode.field "detail" JsonDecode.string)
-                (JsonDecode.field "status" JsonDecode.int)
-                (JsonDecode.field "title" JsonDecode.string)
-    in
-        if 200 <= response.status && response.status < 300 then
-            case response.value of
-                Http.Text text ->
-                    []
-
-                _ ->
-                    [ App.Types.Alert
-                        App.Types.AlertDanger
-                        "Error!"
-                        "Response body is a blob, expecting a string."
-                    ]
-        else
-            [ App.Types.Alert
-                App.Types.AlertDanger
-                "Error!"
-                (case response.value of
-                    Http.Text text ->
-                        case JsonDecode.decodeString decoderError text of
-                            Ok obj ->
-                                obj.detail
-
-                            Err error ->
-                                text
-
-                    r ->
-                        response.statusText
-                )
-            ]
+-- handleResponse : Http.Response x -> List (App.Types.Alert)
+-- handleResponse response =
+--     let
+--         decoderError =
+--             JsonDecode.map4 App.Types.ResponseError
+--                 (JsonDecode.field "type" JsonDecode.string)
+--                 (JsonDecode.field "detail" JsonDecode.string)
+--                 (JsonDecode.field "status" JsonDecode.int)
+--                 (JsonDecode.field "title" JsonDecode.string)
+--     in
+--         if 200 <= response.status && response.status < 300 then
+--             case response.value of
+--                 Http.Text text ->
+--                     []
+-- 
+--                 _ ->
+--                     [ App.Types.Alert
+--                         App.Types.AlertDanger
+--                         "Error!"
+--                         "Response body is a blob, expecting a string."
+--                     ]
+--         else
+--             [ App.Types.Alert
+--                 App.Types.AlertDanger
+--                 "Error!"
+--                 (case response.value of
+--                     Http.Text text ->
+--                         case JsonDecode.decodeString decoderError text of
+--                             Ok obj ->
+--                                 obj.detail
+-- 
+--                             Err error ->
+--                                 text
+-- 
+--                     r ->
+--                         response.statusText
+--                 )
+--             ]
 
 
 viewAlerts :

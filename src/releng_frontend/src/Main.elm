@@ -211,12 +211,12 @@ hawkSend :
     TaskclusterLogin.Model
     -> String
     -> String
-    -> Http.Request
+    -> Hawk.Request
     -> Cmd App.Msg
 hawkSend user page route request =
     case user of
         Just user2 ->
-            Hawk.send (page ++ route) request user2
+            Hawk.send request user2
                 |> Cmd.map App.HawkMsg
 
         Nothing ->
