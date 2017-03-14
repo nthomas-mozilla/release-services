@@ -343,7 +343,7 @@ in rec {
     }:
     let
       scss_common = ./../../lib/scss_common;
-      elm_common = ./../../lib/elm_common;
+      frontend_common = ./../../lib/frontend_common;
       self = stdenv.mkDerivation {
         name = "${name}-${version}";
 
@@ -369,7 +369,7 @@ in rec {
           for item in ./*; do
             if [ -h $item ]; then
               rm -f $item
-              cp ${elm_common}/`basename $item` ./
+              cp ${frontend_common}/`basename $item` ./
             fi
           done
 
@@ -377,7 +377,7 @@ in rec {
             for item in ./src/*; do
               if [ -h $item ]; then
                 rm -f $item
-                cp ${elm_common}/`basename $item` ./src/
+                cp ${frontend_common}/`basename $item` ./src/
               fi
             done
           fi
