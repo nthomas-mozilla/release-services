@@ -75,9 +75,9 @@ paths:
         200:
           description: Taskcluster task cancel task group
 
-  /{uid}/tasks/{taskid}/cancel:
+  /{uid}/tasks/{taskId}/cancel:
     put:
-      operationId: "shipit_taskcluster.api.cancel_task"
+      operationId: "shipit_taskcluster.api.cancel_single_task"
       description: ""
       parameters:
         - $ref: '#/parameters/uid'
@@ -86,7 +86,7 @@ paths:
         200:
           description: Taskcluster task cancelled
 
-  /{uid}/tasks/{taskid}/rerun:
+  /{uid}/tasks/{taskId}/rerun:
     put:
       operationId: "shipit_taskcluster.api.rerun_task"
       description: "Reruns a Taskcluster step. This forces a new run num even if max is reached"
@@ -97,7 +97,7 @@ paths:
         200:
           description: Taskcluster task rerun
 
-  /{uid}/tasks/{taskid}/report-completed:
+  /{uid}/tasks/{taskId}/report-completed:
     put:
       operationId: "shipit_taskcluster.api.report_task_complete"
       description: ""

@@ -17,7 +17,7 @@ def get_task_group_state(taskGroupId):
     # query taskcluster group api for overall state
     pass
 
-def cancel_tasks(taskGroupId):
+def cancel_group(taskGroupId):
     # cancel all tasks by taskGroupId
     pass
 
@@ -27,4 +27,12 @@ def cancel_task(taskId):
 
 def update_task_state(taskId, result):
     # force task result
+    pass
+
+def redo_task(taskId):
+    # rerun task by taskId
+    pass
+
+def report_task_completed(taskId):
+    # tell TC that a task is done by taskId
     pass
