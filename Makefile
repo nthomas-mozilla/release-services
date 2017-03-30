@@ -220,6 +220,7 @@ docker-run-shipit_frontend: develop-run-FRONTEND
 docker-run-shipit_dashboard: develop-run-BACKEND
 docker-run-shipit_pipeline: develop-run-BACKEND
 docker-run-shipit_signoff: develop-run-BACKEND
+docker-run-shipit_taskcluster: develop-run-BACKEND
 
 develop-run-postgres: build-postgresql require-initdb
 	./result-tool-postgresql/bin/postgres -D $(PWD)/tmp/postgres -h localhost -p $(APP_DEV_POSTGRES_PORT)

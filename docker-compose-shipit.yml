@@ -80,3 +80,16 @@ services:
     environment:
       - APP_DEV_HOST=0.0.0.0
       - SERVICES_APP=shipit_signoff
+
+  shipit_taskcluster:
+    image: mozbhearsum/bhearsum-shipit-test
+    expose:
+      - 8014
+    ports:
+      - "8014:8014"
+    volumes:
+      - .:/app
+    working_dir: /app
+    environment:
+      - APP_DEV_HOST=0.0.0.0
+      - SERVICES_APP=shipit_taskcluster
